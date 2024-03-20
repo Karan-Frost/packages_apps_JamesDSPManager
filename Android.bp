@@ -1,0 +1,43 @@
+soong_namespace {
+}
+
+android_app_import {
+    name: "JamesDSPManager",
+    apk: "system/app/JamesDSPManager/JamesDSPManagerThePBone.apk",
+    presigned: true,
+    preprocessed: true,
+    dex_preopt: { enabled: false },
+    overrides: ["AudioFX"],
+    optional_uses_libs: [
+    "androidx.window.extensions",
+    "androidx.window.sidecar",
+    ],
+}
+
+cc_prebuilt_library_shared {
+    name: "libjamesdsp",
+    strip: {
+        none: true,
+    },
+    target: {
+        android_arm: {
+            srcs: ["vendor/lib/soundfx/libjamesdsp.so"],
+            shared_libs: ["liblog", ],
+        },
+        android_arm64: {
+            srcs: ["vendor/lib64/soundfx/libjamesdsp.so"],
+            shared_libs: ["liblog", ],
+        },
+    },
+    compile_multilib: "both",
+    relative_install_path: "soundfx",
+    prefer: true,
+    soc_specific: true,
+}
+
+prebuilt_etc {
+    name: "privapp-permissions-james.dsp.xml",
+    src: "permissions/privapp-permissions-james.dsp.xml",
+    sub_dir: "permissions",
+    system_ext_specific: true,
+}
